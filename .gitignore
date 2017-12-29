@@ -1,2 +1,5 @@
 *.jar
 gradle/
+gradlew.bat
+gradlew
+settings.gradle
