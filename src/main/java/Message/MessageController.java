@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 public class MessageController {
-	private String url = "http://swe.wst.univie.ac.at:18235";
+	private final String url = "http://swe.wst.univie.ac.at:18235";
 	
 	public String newGame() {
 		String template = "", requestString = url + "/game/new";
