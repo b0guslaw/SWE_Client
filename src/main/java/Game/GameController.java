@@ -1,4 +1,4 @@
-package Game;
+package game;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
