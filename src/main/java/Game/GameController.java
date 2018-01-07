@@ -30,4 +30,12 @@ public class GameController {
 		context = JAXBContext.newInstance(NewGame.class);
 		unmarshaller = context.createUnmarshaller();
 	}
+	
+	public GameModel getGameModel() {
+		return this.model;
+	}
+	
+	public GameView getGameView() {
+		return this.view;
+	}
 }

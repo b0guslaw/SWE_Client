@@ -6,9 +6,11 @@ public class GameModel {
 	private MessageController messageController;
 	private String gameID, playerID;
 	private String playerFirstName, playerLastName;
+	private Map map;
 	
 	public GameModel() {
 		messageController = new MessageController();
+		this.map = new Map();
 	}
 	
 	public MessageController getMessageController(){
@@ -49,5 +51,9 @@ public class GameModel {
 	
 	public String getPlayerLastName() {
 		return this.playerLastName;
+	}
+	
+	public Map getMap() {
+		return this.map;
 	}
 }
