@@ -1,14 +1,14 @@
 package main;
 
+import javax.xml.bind.JAXBException;
+
 import game.GameController;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JAXBException {
 		GameController cont = new GameController();
-		cont.getGameModel().getMap().generateOwnHalf();
-		cont.getGameView().printOwn(cont.getGameModel().getMap().getRawOwnNode());
-
+		cont.startGame();
 	}
 
 }

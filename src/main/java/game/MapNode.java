@@ -28,8 +28,14 @@ public class MapNode {
 		return treasurePresent;
 	}
 	
-	public void setFort() {
-		this.fortPresent = true;
+	public boolean setFort() {
+		if(!this.treasurePresent) {
+			this.fortPresent = true;
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 	
 	public void setTreasure() {

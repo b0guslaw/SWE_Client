@@ -27,8 +27,8 @@ public class GameController {
 	
 	public void startGame() throws JAXBException {
 		String id = model.getMessageController().newGame();
-		context = JAXBContext.newInstance(NewGame.class);
-		unmarshaller = context.createUnmarshaller();
+		//context = JAXBContext.newInstance(NewGame.class);
+		//unmarshaller = context.createUnmarshaller();
 	}
 	
 	public GameModel getGameModel() {

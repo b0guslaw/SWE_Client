@@ -14,6 +14,7 @@ public class MessageController {
 		RestTemplate restTemplate = new RestTemplate();
 		
 		template = restTemplate.getForObject(requestString, String.class);
+		System.out.println(template);
 		return template;
 	}
 }

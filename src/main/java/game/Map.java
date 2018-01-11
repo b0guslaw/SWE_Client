@@ -26,27 +26,21 @@ public class Map {
 				randNum = ThreadLocalRandom.current().nextInt(0, 11);
 				if(randNum < 2 && waterCount != 4 && i != 0) {
 					node = new MapNode("water", false, false);
-					//System.out.println("Rand is "+ randNum + ": Water");
 					++waterCount;
 					
 				} else if (randNum > 6 && mountainCount != 4) {
 					node = new MapNode("mountain", false, false);
-					//System.out.println("Rand is "+ randNum + ": Mountain");
 					++mountainCount;
 					
 				} else {
 					node = new MapNode("grass", false, false);
-					//System.out.println("Rand is "+ randNum + ": Grass");
 					++grassCount;
 				}
 				_ownHalf[i][j] = node;
 				nodeCount++;
 			}
 		}
-		
-		System.out.println("I generated " + waterCount + " water Tiles");
-		System.out.println("I generated " + mountainCount + " mountain Tiles");
-		System.out.println("I generated " + grassCount + " grass Tiles");
+	
 		
 		/*This is to uphold business rules. Map generation happens quickly and is
 		 * fairly cheap. If this function returns false, we'll just generate a new map. By
@@ -57,6 +51,16 @@ public class Map {
 			return false;
 		}
 		
+		int randRow = ThreadLocalRandom.current().nextInt(5, 9);
+		int randCol = ThreadLocalRandom.current().nextInt(0, 8);		
+		_ownHalf[randRow][randCol].setTreasure();
+		
+		int randRowFort = ThreadLocalRandom.current().nextInt(5, 9);
+		int randColFort = ThreadLocalRandom.current().nextInt(0, 8);	
+		while(_ownHalf[randRowFort][randColFort].setFort()) {
+			randRowFort = ThreadLocalRandom.current().nextInt(5, 9);
+			randColFort = ThreadLocalRandom.current().nextInt(0, 8);
+		}
 		return true;
 	}
 	
@@ -71,9 +75,14 @@ public class Map {
 		catch (NullPointerException npe) {
 				npe.printStackTrace();
 		}
-	}
+	}	
 	
-	public void generateFullMap() {
+	public void resetOwnHalf() {
+		_ownHalf = null;
+		_ownHalf = new MapNode[4][8];
+	}
+
+	public void assembleFullMap() {
 		try {
 			//assembling top half
 			for(int i = 0; i < 4; ++i) {

@@ -53,7 +53,21 @@ public class GameModel {
 		return this.playerLastName;
 	}
 	
-	public Map getMap() {
-		return this.map;
+	private void generateOwnMap() {
+		boolean finished = false;
+		while(finished) {
+			map.resetOwnHalf();
+			finished = map.generateOwnHalf();
+		}
+	}
+	
+	private void generateOtherMap(MapNode[][] otherMapHalf) {
+		map.setOtherHalf(otherMapHalf);
+	}
+	
+	public void generateMap () {
+		generateOwnMap();
+		//map.setOtherHalf(); <- XML goes here
+		map.assembleFullMap();
 	}
 }
