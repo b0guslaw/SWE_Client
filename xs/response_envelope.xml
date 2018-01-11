@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="ResponseEnvelope">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="exceptionName" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="exceptionMessage" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="state" type="statevalues" minOccurs="1" maxOccurs="1" />
+				<xs:element name="data" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="gameState">
+		<xs:sequence>
+			<xs:element ref="players" minOccurs="1" maxOccurs="1" />
+			<xs:element ref="map" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="gameStateId" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="players">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="2" minOccurs="1" ref="player" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="player">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="uniquePlayerID" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="firstName" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="lastName" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="studentID" minOccurs="1" maxOccurs="1" />
+				<xs:element name="state" type="playerGameStatevalues" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="collectedTreasure" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="uniquePlayerID" type="xs:string" />
+	<xs:element name="firstName" type="xs:string" />
+	<xs:element name="lastName" type="xs:string" />
+	<xs:element name="studentID" type="xs:string" />
+	<xs:element name="collectedTreasure" type="xs:boolean" />
+	<xs:element name="map">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="mapNodes" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mapNodes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="32" maxOccurs="64" ref="mapNode" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="mapNode">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="1" maxOccurs="1" ref="playerPositionState" />
+				<xs:element minOccurs="1" maxOccurs="1" ref="terrain" />
+				<xs:element minOccurs="1" maxOccurs="1" ref="tresureState" />
+				<xs:element minOccurs="1" maxOccurs="1" ref="fortState" />
+				<xs:element minOccurs="1" maxOccurs="1" ref="X" />
+				<xs:element minOccurs="1" maxOccurs="1" ref="Y" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="playerPositionState" type="playerStatevalues" />
+	<xs:element name="terrain" type="terrainStatevalues" />
+	<xs:element name="tresureState" type="tresureStatevalues" />
+	<xs:element name="fortState" type="fortStatevalues" />
+	<xs:element name="X">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0" />
+				<xs:maxInclusive value="7" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Y">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0" />
+				<xs:maxInclusive value="7" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="gameStateId" type="xs:string" />
+	<xs:simpleType name="statevalues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK" />
+			<xs:enumeration value="ERROR" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="playerStatevalues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NoPlayerPresent" />
+			<xs:enumeration value="EnemyPlayerPosition" />
+			<xs:enumeration value="MyPosition" />
+			<xs:enumeration value="BothPlayerPosition" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="terrainStatevalues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Water" />
+			<xs:enumeration value="Grass" />
+			<xs:enumeration value="Mountain" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="playerGameStatevalues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Won" />
+			<xs:enumeration value="Lost" />
+			<xs:enumeration value="ShouldActNext" />
+			<xs:enumeration value="ShouldWait" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tresureStatevalues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NoOrUnknownTresureState" />
+			<xs:enumeration value="MyTresureIsPlacedHere" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="fortStatevalues">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NoOrUnknownFortState" />
+			<xs:enumeration value="MyFortPresent" />
+			<xs:enumeration value="EnemyFortPresent" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

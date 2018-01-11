@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="halfMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="uniquePlayerID" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element name="newMapNodes" minOccurs="1" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+						<xs:element name="newMapNode" minOccurs="32" maxOccurs="32">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="X" minOccurs="1" maxOccurs="1">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="0" />
+												<xs:maxInclusive value="7" />
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Y" minOccurs="1" maxOccurs="1">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="0" />
+												<xs:maxInclusive value="3" />
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+										<xs:element name="fortPresent" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+										<xs:element name="terrain" type="terraintype" minOccurs="1" maxOccurs="1" />
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="terraintype">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Grass" />
+			<xs:enumeration value="Water" />
+			<xs:enumeration value="Mountain" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
+ 
