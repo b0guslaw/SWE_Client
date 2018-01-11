@@ -3,40 +3,62 @@ package game;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Map {
 	private MapNode[][] _fullMap, _ownHalf, _otherHalf;
-	
-	private ArrayList<MapNode> ownMapHalf, otherMapHalf, fullMap;
 	private int treasureIndex, castleIndex;
 	
+	private Logger logger = LoggerFactory.getLogger(Map.class);
+	
 	public Map() {
-		//ownMapHalf = new ArrayList<MapNode>();
-		//otherMapHalf = new ArrayList<MapNode>();
-		//fullMap = new ArrayList<MapNode>();
-		
-		//_fullMap = new MapNode[8][8];
+		_fullMap = new MapNode[8][8];
 		_ownHalf = new MapNode[4][8];
-		//_otherHalf = new MapNode[4][8];
+		_otherHalf = new MapNode[4][8];
 	}
 	
-	public void generateOwnHalf() {
-		int castleCount = 0, treasureCount = 0;
-		int grassCount, waterCount, mountainCount = 0;
+	public boolean generateOwnHalf() {
+		int grassCount = 0, waterCount = 0, mountainCount = 0;
 		int randNum;
 		MapNode node = null;
 		for(int i = 0; i < 4; i++) {
+			System.out.println("I:" + i);
 			for(int j = 0; j < 8; j++) {
-				randNum = ThreadLocalRandom.current().nextInt(0, 101);
-				if(randNum < 33) {
-					node = new MapNode("water",false);
-				} else if (randNum >= 33 && randNum < 66) {
-					node = new MapNode("grass", false);
-				} else if (randNum <= 66) {
-					node = new MapNode("mountain", false);
+				System.out.println("J:" + j);
+				randNum = 4; //ThreadLocalRandom.current().nextInt(0, 11);
+				if(randNum < 2 && waterCount != 4) {
+					node = new MapNode("water", false, false);
+					//System.out.println("Rand is "+ randNum + ": Water");
+					++waterCount;
+					
+				} else if (randNum >= 2 && randNum < 6) {
+					node = new MapNode("grass", false, false);
+					//System.out.println("Rand is "+ randNum + ": Grass");
+					++grassCount;
+					
+				} else if (randNum > 6 && mountainCount != 3) {
+					node = new MapNode("mountain", false, false);
+					//System.out.println("Rand is "+ randNum + ": Mountain");
+					++mountainCount;
+					
 				}
 				_ownHalf[i][j] = node;
+				
 			}
+			
 		}
+		
+		/*This is to uphold business rules. Map generation happens quickly and is
+		 * fairly cheap. If this function returns false, we'll just generate a new map. By
+		 * chance mountains and grass each have a 40% chance, water a 20% chance. This also
+		 * reduces the risk of islands
+		 */
+		if(waterCount > 4 && grassCount > 5 && mountainCount > 3) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public void setOtherHalf(ArrayList<MapNode> otherMapHalf) {
@@ -52,14 +74,22 @@ public class Map {
 	
 	public void generateFullMap() {
 		try {
-			fullMap = new ArrayList<MapNode>();
-			for(MapNode node : ownMapHalf) {
-				fullMap.add(node);
+			//assembling top half
+			for(int i = 0; i < 4; ++i) {
+				for(int j = 0; j < 8; ++j) {
+					_fullMap[i][j] = _otherHalf[i][j]; 
+				}
 			}
-			for(MapNode node : otherMapHalf) {
-				fullMap.add(node);
+			//assembling lower (own) half
+			int ownRow = 0;
+			for(int i = 5; i <= 8; ++i) {
+				for(int j = 0; j < 8; ++j) {
+					_fullMap[i][j] = _ownHalf[ownRow][j];
+					++ownRow;
+				}
 			}
 		} catch (NullPointerException npe) {
+			logger.error("Assembling the full map failed. Maybe the other half was missing?");
 			npe.printStackTrace();
 		}
 	}

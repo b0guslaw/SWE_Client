@@ -5,15 +5,17 @@ public class MapNode {
 	private boolean fortPresent;
 	private boolean treasurePresent;
 	
-	public MapNode(String terraintype, boolean fortPresent) {
-		if(terraintype.equals("water") || terraintype.equals("grass") || terraintype.equals("mountain")) {
-			this.terrainType = terraintype;
-			this.fortPresent = fortPresent;			
+	public MapNode(String _terraintype, boolean fortPresent, boolean treasurePresent) {
+		if((_terraintype.equals("water") || _terraintype.equals("grass") || _terraintype.equals("mountain"))) {
+			this.terrainType = _terraintype;
+			this.fortPresent = fortPresent;	
+			this.treasurePresent = treasurePresent;
+			System.out.println("I am: " + terrainType);
 		} else {
 			throw new IllegalArgumentException();
 		}
 	}
-	
+
 	public String getTerrainType() {
 		return this.terrainType;
 	}
@@ -24,5 +26,13 @@ public class MapNode {
 	
 	public boolean IsTreasurePresent(){
 		return treasurePresent;
+	}
+	
+	public void setFort() {
+		this.fortPresent = true;
+	}
+	
+	public void setTreasure() {
+		this.treasurePresent = true;
 	}
 }
