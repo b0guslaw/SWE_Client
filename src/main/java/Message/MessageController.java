@@ -6,7 +6,9 @@ import java.io.StringReader;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Result;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -18,13 +20,13 @@ import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import jaxb.GameIdentifier;
+import jaxb.PlayerRegistration;
 
 public class MessageController {
-	private String url = "http://swe.wst.univie.ac.at:18235";
+	private String url; //= "http://swe.wst.univie.ac.at:18235";
 	
 	public MessageController(String _url) {
-		//TODO: REMOVE THIS CONTENT FOR FINAL VERSION
-		//this.url = _url;
+		this.url = _url;
 	}
 	
 	public String newGame() throws JAXBException {
@@ -48,10 +50,20 @@ public class MessageController {
 	 * when registering the player did not succeed.
 	 * @param firstName, lastName, gameID
 	 * @return boolean
+	 * @throws JAXBException 
 	 */
-	public boolean registerPlayer(String firstName, String lastName, String gameID) {
+	public boolean registerPlayer(String firstName, String lastName, String studentID) throws JAXBException {
 		//Build XML
+		PlayerRegistration playerRegistration = new PlayerRegistration();
+		playerRegistration.setStudentFirstName(firstName);
+		playerRegistration.setStudentLastName(lastName);
+		playerRegistration.setStudentID(studentID);
 		
+		JAXBContext context = JAXBContext.newInstance(PlayerRegistration.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		Result xmlString = null;
+		marshaller.marshal(playerRegistration, xmlString);
 		//Build POST
 		
 		RestTemplate restTemplate = new RestTemplate();

@@ -6,12 +6,15 @@ import Message.MessageController;
 
 public class GameModel {
 	private MessageController messageController;
-	private String gameID, playerID;
-	private String playerFirstName, playerLastName;
+	private String gameID, uniqueplayerID;
+	private String playerFirstName, playerLastName, studentID;
 	private Map map;
 	
-	public GameModel() {
-		messageController = new MessageController("");
+	public GameModel(String url, String _playerFirstName, String  _playerLastName, String _studentID) {
+		messageController = new MessageController(url);
+		this.playerFirstName = _playerFirstName;
+		this.playerLastName = _playerLastName;
+		this.studentID = _studentID;
 		this.map = new Map();
 	}
 	
@@ -36,11 +39,11 @@ public class GameModel {
 	}
 	
 	public void setPlayerID(String _playerID) {
-		this.playerID = _playerID;
+		this.uniqueplayerID = _playerID;
 	}
 	
 	public String getPlayerID() {
-		return this.playerID;
+		return this.uniqueplayerID;
 	}
 	
 	public void setPlayerFirstName(String _playerName) {

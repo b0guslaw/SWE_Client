@@ -20,8 +20,8 @@ public class GameController {
 	
 	private Logger logger = LoggerFactory.getLogger(GameController.class);
 	
-	public GameController() {
-		model = new GameModel();
+	public GameController(String url, String _playerFirstName, String _playerLastName, String _studentID) {
+		model = new GameModel(url, _playerFirstName, _playerLastName, _studentID);
 		view = new GameView();
 	}
 	
