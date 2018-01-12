@@ -34,14 +34,22 @@ public class MessageController {
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(GameIdentifier.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+		System.out.println("XML" + response);
 		
 		StringReader reader = new StringReader(response);
 		GameIdentifier game = (GameIdentifier) unmarshaller.unmarshal(reader);
 		
 		return game.getGameID();
 	}
-	
-	public boolean registerPlayer(String playerName) {
+
+	/**
+	 * Registers player to the earlier specified gameID. Returns false
+	 * when registering the player did not succeed.
+	 * @param firstName, lastName, gameID
+	 * @return boolean
+	 */
+	public boolean registerPlayer(String firstName, String lastName, String gameID) {
 		//Build XML
 		
 		//Build POST
@@ -51,4 +59,6 @@ public class MessageController {
 		//return true if POST request was sucessful, otherwise false
 		return true;
 	}
+
+
 }

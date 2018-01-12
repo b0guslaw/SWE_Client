@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class Map {
 	private MapNode[][] _fullMap, _ownHalf, _otherHalf;
-	private int treasureIndex, castleIndex;
+	private int treasureIndex[], castleIndex[];
 	
 	private Logger logger = LoggerFactory.getLogger(Map.class);
 	
@@ -15,9 +15,12 @@ public class Map {
 		_fullMap = new MapNode[8][8];
 		_ownHalf = new MapNode[4][8];
 		_otherHalf = new MapNode[4][8];
+		treasureIndex = new int[2];
+		castleIndex = new int[2];
 	}
 	
 	public boolean generateOwnHalf() {
+		logger.info("Starting map generation");
 		int grassCount = 0, waterCount = 0, mountainCount = 0, nodeCount = 0;
 		int randNum;
 		MapNode node = null;
@@ -42,12 +45,13 @@ public class Map {
 		}
 	
 		
-		/*This is to uphold business rules. Map generation happens quickly and is
+		/* This is to uphold business rules. Map generation happens quickly and is
 		 * fairly cheap. If this function returns false, we'll just generate a new map. By
 		 * chance mountains and grass each have a 40% chance, water a 20% chance. This also
 		 * reduces the risk of islands
 		 */
 		if(waterCount > 4 && grassCount > 5 && mountainCount > 3) {
+			logger.warn("Map generation failed because of not upheld business rules. Retryin...");
 			return false;
 		}
 		
@@ -61,6 +65,12 @@ public class Map {
 			randRowFort = ThreadLocalRandom.current().nextInt(5, 9);
 			randColFort = ThreadLocalRandom.current().nextInt(0, 8);
 		}
+
+		treasureIndex[0] = randRow;
+		treasureIndex[1] = randCol;
+		castleIndex[0] = randRowFort;
+		castleIndex[1] = randColFort;
+		logger.info("Map generation completed");
 		return true;
 	}
 	
@@ -73,6 +83,7 @@ public class Map {
 			}
 		}
 		catch (NullPointerException npe) {
+			logger.error("The received map was null ");
 				npe.printStackTrace();
 		}
 	}	

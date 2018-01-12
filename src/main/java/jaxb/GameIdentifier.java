@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement
+@XmlRootElement(name="GameIdentifier")
 public class GameIdentifier {
-	@XmlElementWrapper(name = "GameIdentifier")
+	//@XmlElementWrapper(name = "GameIdentifier")
 	@XmlElement(name = "UniqueGameID")
 	private String UniqueGameID;
 	
