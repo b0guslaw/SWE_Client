@@ -8,7 +8,7 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jaxb.NewGame;
+import jaxb.GameIdentifier;
 
 public class GameController {
 	private GameModel model;
@@ -25,10 +25,8 @@ public class GameController {
 		view = new GameView();
 	}
 	
-	public void startGame() throws JAXBException {
-		String id = model.getMessageController().newGame();
-		//context = JAXBContext.newInstance(NewGame.class);
-		//unmarshaller = context.createUnmarshaller();
+	public void startGame() {
+		model.startNewGame();
 	}
 	
 	public GameModel getGameModel() {

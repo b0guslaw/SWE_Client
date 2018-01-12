@@ -9,6 +9,7 @@ public class Main {
 	public static void main(String[] args) throws JAXBException {
 		GameController cont = new GameController();
 		cont.startGame();
+		System.out.println(cont.getGameModel().getGameID());
 	}
 
 }

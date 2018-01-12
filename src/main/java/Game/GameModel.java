@@ -1,5 +1,7 @@
 package game;
 
+import javax.xml.bind.JAXBException;
+
 import Message.MessageController;
 
 public class GameModel {
@@ -9,12 +11,16 @@ public class GameModel {
 	private Map map;
 	
 	public GameModel() {
-		messageController = new MessageController();
+		messageController = new MessageController("");
 		this.map = new Map();
 	}
 	
-	public MessageController getMessageController(){
-		return this.messageController;
+	public void startNewGame() {
+		try {
+			gameID = messageController.newGame();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public GameModel getGameModel() {
