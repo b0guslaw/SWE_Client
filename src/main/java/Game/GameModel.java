@@ -28,6 +28,11 @@ public class GameModel {
 		}
 	}
 	
+	public void transferMapToServer() {
+		generateOwnMap();
+		messageController.sendHalfMap(gameID, uniqueplayerID, map);
+	}
+	
 	public GameModel getGameModel() {
 		return this;
 	}
@@ -74,11 +79,5 @@ public class GameModel {
 	
 	private void generateOtherMap(MapNode[][] otherMapHalf) {
 		map.setOtherHalf(otherMapHalf);
-	}
-	
-	public void generateMap () {
-		generateOwnMap();
-		//map.setOtherHalf(); <- XML goes here
-		map.assembleFullMap();
 	}
 }

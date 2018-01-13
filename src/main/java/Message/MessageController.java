@@ -1,40 +1,31 @@
 package Message;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.Result;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import org.xml.sax.SAXException;
-
+import game.Map;
 import jaxb.GameIdentifier;
+import jaxb.HalfMap;
 import jaxb.PlayerRegistration;
 import jaxb.ResponseEnvelope;
 
 /*This class is responsible of all communication with the server. It also serves as a XML Parser.
-*Messages and their parsing are kept in the same class and functions to avoid unnecessary function class
-*/
+* Messages and their parsing are kept in the same class and functions to avoid unnecessary function class */
 public class MessageController {
 	private String url; //= "http://swe.wst.univie.ac.at:18235";
+	private Logger logger = LoggerFactory.getLogger(MessageController.class);
 	
 	/**
 	 * Specifies the server url in the constructor
@@ -99,7 +90,30 @@ public class MessageController {
 		JAXBContext responseContext = JAXBContext.newInstance(ResponseEnvelope.class);
 		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
 		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
+		if(envelope != null) {
+			return envelope.getuniquePlayerID();
+		} else {
+			logger.error("Something went wrong during the player registration");
+			return null;
+		}
+	}
+	
+	public String sendHalfMap(String gameID, String playerID, Map _map) {
+		//Build XML
+		String xmlString = "";
+		HalfMap map = new HalfMap();
+		map.setNewMapNodes(map.getOwnHalfArrayList());
 		
-		return envelope.getuniquePlayerID();
+		//Build POST
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+		HttpEntity<String> request = new HttpEntity<String>(xmlString.toString(), headers);
+		//Send POST
+		String postUrl = url + "/game/" + gameID + "/register";
+		String response = restTemplate.postForObject(postUrl, request, String.class);
+		StringReader reader = new StringReader(response);
+		
+		return null;
 	}
 }

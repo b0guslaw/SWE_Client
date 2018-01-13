@@ -1,13 +1,16 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jaxb.NewMapNode;
+
 public class Map {
 	private MapNode[][] _fullMap, _ownHalf, _otherHalf;
-	private int treasureIndex[], castleIndex[];
+	private int castleIndex[];
 	
 	private Logger logger = LoggerFactory.getLogger(Map.class);
 	
@@ -18,7 +21,6 @@ public class Map {
 		_fullMap = new MapNode[8][8];
 		_ownHalf = new MapNode[4][8];
 		_otherHalf = new MapNode[4][8];
-		treasureIndex = new int[2];
 		castleIndex = new int[2];
 	}
 	
@@ -63,19 +65,11 @@ public class Map {
 			return false; //no reason to continue at this point
 		}
 		
-		int randRow = ThreadLocalRandom.current().nextInt(5, 9);
-		int randCol = ThreadLocalRandom.current().nextInt(0, 8);		
-		_ownHalf[randRow][randCol].setTreasure();
-		
 		int randRowFort = ThreadLocalRandom.current().nextInt(5, 9);
 		int randColFort = ThreadLocalRandom.current().nextInt(0, 8);	
-		while(_ownHalf[randRowFort][randColFort].setFort()) {
-			randRowFort = ThreadLocalRandom.current().nextInt(5, 9);
-			randColFort = ThreadLocalRandom.current().nextInt(0, 8);
-		}
-
-		treasureIndex[0] = randRow;
-		treasureIndex[1] = randCol;
+		randRowFort = ThreadLocalRandom.current().nextInt(5, 9);
+		randColFort = ThreadLocalRandom.current().nextInt(0, 8);
+		
 		castleIndex[0] = randRowFort;
 		castleIndex[1] = randColFort;
 		logger.info("Map generation completed");
@@ -134,8 +128,19 @@ public class Map {
 		}
 	}
 	
-	//TESTING FUNCTION --- REMOVE FOR FINAL ASSIGNMENT TODO
-	public MapNode[][] getRawOwnNode() {
+	public ArrayList<NewMapNode> getOwnHalfArrayList(){
+		ArrayList<NewMapNode> helperArrayList = new ArrayList<NewMapNode>();
+		
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 8; ++j) {
+				NewMapNode temp = new NewMapNode();
+				temp.setX();
+			}
+		}
+		return helperArrayList;
+	}
+	
+	public MapNode[][] getOwnHalf() {
 		return this._ownHalf;
 	}
 }
