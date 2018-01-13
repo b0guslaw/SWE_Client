@@ -102,7 +102,7 @@ public class MessageController {
 		//Build XML
 		String xmlString = "";
 		HalfMap map = new HalfMap();
-		map.setNewMapNodes(map.getOwnHalfArrayList());
+		map.setNewMapNodes(_map.getOwnHalfArrayList());
 		
 		//Build POST
 		RestTemplate restTemplate = new RestTemplate();

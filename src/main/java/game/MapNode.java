@@ -5,7 +5,7 @@ public class MapNode {
 	private boolean fortPresent;
 	
 	public MapNode(String _terraintype, boolean fortPresent, boolean treasurePresent) {
-		if((_terraintype.equals("water") || _terraintype.equals("grass") || _terraintype.equals("mountain"))) {
+		if((_terraintype.equals("Water") || _terraintype.equals("Grass") || _terraintype.equals("Mountain"))) {
 			this.terrainType = _terraintype;
 			this.fortPresent = fortPresent;	
 		} else {

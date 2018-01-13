@@ -69,9 +69,9 @@ public class GameModel {
 		return this.playerLastName;
 	}
 	
-	private void generateOwnMap() {
-		boolean finished = false;
-		while(finished) {
+	public void generateOwnMap() {
+		boolean finished = map.generateOwnHalf();
+		while(!finished) {
 			map.resetOwnHalf();
 			finished = map.generateOwnHalf();
 		}
@@ -79,5 +79,9 @@ public class GameModel {
 	
 	private void generateOtherMap(MapNode[][] otherMapHalf) {
 		map.setOtherHalf(otherMapHalf);
+	}
+	
+	public Map getMap() {
+		return this.map;
 	}
 }
