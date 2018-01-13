@@ -27,7 +27,6 @@ public class Main {
 		
 		GameController cont = new GameController(url, firstName, lastName, studentID);
 		cont.startGame();
-		System.out.println(cont.getGameModel().getGameID());
 	}
 
 }

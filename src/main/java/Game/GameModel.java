@@ -21,7 +21,8 @@ public class GameModel {
 	public void startNewGame() {
 		try {
 			gameID = messageController.newGame();
-			messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
+			uniqueplayerID = messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
+			//System.out.println(uniqueplayerID);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}

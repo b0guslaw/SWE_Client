@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 
 import jaxb.GameIdentifier;
 import jaxb.PlayerRegistration;
+import jaxb.ResponseEnvelope;
 
 /*This class is responsible of all communication with the server. It also serves as a XML Parser.
 *Messages and their parsing are kept in the same class and functions to avoid unnecessary function class
@@ -57,7 +58,7 @@ public class MessageController {
 		JAXBContext jaxbContext = JAXBContext.newInstance(GameIdentifier.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-		System.out.println("XML" + response);
+		//System.out.println("XML" + response);
 		
 		StringReader reader = new StringReader(response);
 		GameIdentifier game = (GameIdentifier) unmarshaller.unmarshal(reader);
@@ -66,13 +67,13 @@ public class MessageController {
 	}
 
 	/**
-	 * Registers player to the earlier specified gameID. Returns false
-	 * when registering the player did not succeed.
+	 * Registers player to the earlier specified gameID. Returns the unique player ID as we
+	 * get it from the server.
 	 * @param firstName, lastName, gameID
-	 * @return boolean
+	 * @return String
 	 * @throws JAXBException 
 	 */
-	public boolean registerPlayer(String firstName, String lastName, String studentID, String gameID) throws JAXBException {
+	public String registerPlayer(String firstName, String lastName, String studentID, String gameID) throws JAXBException {
 		//Build XML
 		PlayerRegistration playerRegistration = new PlayerRegistration();
 		playerRegistration.setStudentFirstName(firstName);
@@ -84,18 +85,21 @@ public class MessageController {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		StringWriter xmlString = new StringWriter();
 		marshaller.marshal(playerRegistration, xmlString);
-		System.out.println(xmlString);
+
 		//Build POST
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 		HttpEntity<String> request = new HttpEntity<String>(xmlString.toString(), headers);
-		
+		//Send POST
 		String postUrl = url + "/game/" + gameID + "/register";
-		final ResponseEntity<String> response = restTemplate.postForEntity(postUrl, request, String.class);
-		System.out.println(response.getBody());
-		//return true if POST request was successful, otherwise false
-		return true;
+		String response = restTemplate.postForObject(postUrl, request, String.class);
+		StringReader reader = new StringReader(response);
+		//unmarshall response from Server
+		JAXBContext responseContext = JAXBContext.newInstance(ResponseEnvelope.class);
+		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
+		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
+		
+		return envelope.getuniquePlayerID();
 	}
-
 }
