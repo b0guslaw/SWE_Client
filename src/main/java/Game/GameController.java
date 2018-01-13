@@ -14,10 +14,6 @@ public class GameController {
 	private GameModel model;
 	private GameView view;
 	
-	private JAXBContext context;
-	private Marshaller marshaller;
-	private Unmarshaller unmarshaller;
-	
 	private Logger logger = LoggerFactory.getLogger(GameController.class);
 	
 	public GameController(String url, String _playerFirstName, String _playerLastName, String _studentID) {

@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement()
+@XmlRootElement(name = "PlayerRegistration")
 @XmlType(propOrder = {"studentFirstName","studentLastName","studentID"})
 public class PlayerRegistration {
 	private String studentFirstName;
