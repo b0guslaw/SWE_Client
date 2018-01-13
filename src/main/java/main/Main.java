@@ -16,7 +16,7 @@ public class Main {
 		}
 		String firstName, lastName, studentID, url, gameID;
 		url = args[0];
-		if(args[1] != null) {
+		if(args.length == 2) {
 			gameID = args[1];
 		}
 		Scanner sc = new Scanner(System.in);
@@ -30,8 +30,8 @@ public class Main {
 		
 		GameController cont = new GameController(url, firstName, lastName, studentID);
 		cont.startGame();
-		//cont.getGameModel().generateOwnMap();
-		//cont.getGameView().printOwn(cont.getGameModel().getMap().getOwnHalf());
+		cont.getGameModel().generateOwnMap();
+		cont.getGameModel().transferMapToServer();
 	}
 
 }

@@ -98,11 +98,15 @@ public class MessageController {
 		}
 	}
 	
-	public String sendHalfMap(String gameID, String playerID, Map _map) {
+	public String sendHalfMap(String gameID, String playerID, Map _map) throws JAXBException {
 		//Build XML
-		String xmlString = "";
 		HalfMap map = new HalfMap();
 		map.setNewMapNodes(_map.getOwnHalfArrayList());
+		JAXBContext context = JAXBContext.newInstance(HalfMap.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		StringWriter xmlString = new StringWriter();
+		marshaller.marshal(map, xmlString);
 		
 		//Build POST
 		RestTemplate restTemplate = new RestTemplate();
@@ -110,10 +114,13 @@ public class MessageController {
 		headers.setContentType(MediaType.APPLICATION_XML);
 		HttpEntity<String> request = new HttpEntity<String>(xmlString.toString(), headers);
 		//Send POST
-		String postUrl = url + "/game/" + gameID + "/register";
+		String postUrl = url + "/game/" + gameID + "/halfmap";
 		String response = restTemplate.postForObject(postUrl, request, String.class);
 		StringReader reader = new StringReader(response);
-		
-		return null;
+		//unmarshal response from server
+		JAXBContext responseContext = JAXBContext.newInstance(ResponseEnvelope.class);
+		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
+		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
+		return envelope.getState();
 	}
 }

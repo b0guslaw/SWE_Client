@@ -13,8 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class HalfMap {
 	@XmlElementWrapper(name="newMapNodes")
 	@XmlElement(name="NewMapNode")
-	private String unqiuePlayerID;
 	private ArrayList<NewMapNode> NewMapNodes;
+	private String unqiuePlayerID;
 	
 	public String getUnqiuePlayerID() {
 		return unqiuePlayerID;

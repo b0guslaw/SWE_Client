@@ -22,7 +22,6 @@ public class GameModel {
 		try {
 			gameID = messageController.newGame();
 			uniqueplayerID = messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
-			//System.out.println(uniqueplayerID);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
@@ -30,7 +29,11 @@ public class GameModel {
 	
 	public void transferMapToServer() {
 		generateOwnMap();
-		messageController.sendHalfMap(gameID, uniqueplayerID, map);
+		try {
+			messageController.sendHalfMap(gameID, uniqueplayerID, map);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public GameModel getGameModel() {
