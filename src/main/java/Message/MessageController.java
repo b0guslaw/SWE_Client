@@ -98,10 +98,19 @@ public class MessageController {
 		}
 	}
 	
+	/**
+	 * Sends the generated halfmap to the server as XML. Returns the status code of the game as String
+	 * @param gameID
+	 * @param playerID
+	 * @param _map
+	 * @return String
+	 * @throws JAXBException
+	 */
 	public String sendHalfMap(String gameID, String playerID, Map _map) throws JAXBException {
 		//Build XML
 		HalfMap map = new HalfMap();
 		map.setNewMapNodes(_map.getOwnHalfArrayList());
+		
 		JAXBContext context = JAXBContext.newInstance(HalfMap.class);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
