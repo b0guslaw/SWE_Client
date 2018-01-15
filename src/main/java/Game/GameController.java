@@ -16,13 +16,41 @@ public class GameController {
 	
 	private Logger logger = LoggerFactory.getLogger(GameController.class);
 	
-	public GameController(String url, String _playerFirstName, String _playerLastName, String _studentID) {
-		model = new GameModel(url, _playerFirstName, _playerLastName, _studentID);
+	public GameController(String url, String _playerFirstName, String _playerLastName, String _studentID, String _gameID) {
+		model = new GameModel(url, _playerFirstName, _playerLastName, _studentID, _gameID);
 		view = new GameView();
 	}
 	
 	public void startGame() {
 		model.startNewGame();
+	}
+	
+	public String runGame() throws InterruptedException {
+		String winState = model.updateGameState();
+		
+		while(true) {
+			if(winState == null) {
+				break;
+			}
+			if(winState.equalsIgnoreCase("shouldWait")) {
+				Thread.sleep(2000);
+				winState = model.updateGameState();
+				continue;
+			}
+			if(winState.equalsIgnoreCase("shouldActNext")) {
+				winState = model.updateGameState();
+				continue;
+			}
+			if(winState.equalsIgnoreCase("won")) {
+				break;
+			}
+			if(winState.equalsIgnoreCase("lost")) {
+				break;
+			}
+		}
+			
+		//TODO pass new information to gameView
+		return winState;
 	}
 	
 	public GameModel getGameModel() {

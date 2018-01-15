@@ -14,7 +14,7 @@ public class Main {
 			System.out.println("Please provide the URL of the server you are trying to connect to as argument");
 			return;
 		}
-		String firstName, lastName, studentID, url, gameID;
+		String firstName, lastName, studentID, url, gameID = null;
 		url = args[0];
 		if(args.length == 2) {
 			gameID = args[1];
@@ -28,10 +28,15 @@ public class Main {
 		studentID = sc.nextLine();
 		sc.close();
 		
-		GameController cont = new GameController(url, firstName, lastName, studentID);
+		GameController cont = new GameController(url, firstName, lastName, studentID, gameID);
 		cont.startGame();
 		cont.getGameModel().generateOwnMap();
 		cont.getGameModel().transferMapToServer();
+		try {
+			cont.runGame();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

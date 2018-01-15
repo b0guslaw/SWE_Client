@@ -12,25 +12,37 @@ public class GameModel {
 	private MessageController messageController;
 	private String gameID, uniqueplayerID;
 	private String playerFirstName, playerLastName, studentID;
+	private String playerState;
 	private Map map;
 	
 	private Logger logger = LoggerFactory.getLogger(GameModel.class);
 	
-	public GameModel(String url, String _playerFirstName, String  _playerLastName, String _studentID) {
+	public GameModel(String url, String _playerFirstName, String  _playerLastName, String _studentID, String _gameID) {
 		messageController = new MessageController(url);
 		this.playerFirstName = _playerFirstName;
 		this.playerLastName = _playerLastName;
 		this.studentID = _studentID;
+		this.playerState = "";
+		if(_gameID != null) {
+			this.gameID = _gameID;	
+		}
 		this.map = new Map();
 	}
 	
 	public void startNewGame() {
 		try {
-			logger.info("Initializing connection to the server...");
-			gameID = messageController.newGame();
-			logger.info("Retrieved Game ID, asking the server for a unique player ID...");
-			uniqueplayerID = messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
-			logger.info("Connection established!");
+			if(gameID == null) {
+				logger.info("Initializing connection to the server...");
+				gameID = messageController.newGame();
+				logger.info("Retrieved Game ID, asking the server for a unique player ID...");
+				uniqueplayerID = messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
+				logger.info("Connection established!");
+			} else {
+				logger.info("Trying to connect to supplied gameID...");
+				uniqueplayerID = messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
+				logger.info("Retrieved Player ID!");
+				transferMapToServer();
+			}
 		} catch (JAXBException e) {
 			logger.error("There was an error parsing the XML when creating a new Game.");
 			e.printStackTrace();
@@ -49,18 +61,33 @@ public class GameModel {
 		}
 	}
 	
-	public void updateGameState() {
+	public String updateGameState() {
 		GameState gs = new GameState();
+		String winState = null;
 		
 		try {
-			messageController.requestGameState(gameID, uniqueplayerID);
+			gs = messageController.requestGameState(gameID, uniqueplayerID);
+			winState = gs.getState();
 		} catch (JAXBException e) {
 			logger.error("There was an error parsing the XML when requesting the GameState.");
 			e.printStackTrace();
 		}
+		
 		//Update Map
+		map.createFullMapFromArrayList(gs.getMap());
 		//Check Game State
+		if(winState.equalsIgnoreCase("shouldactnext")) {
+			
+		} else if (winState.equalsIgnoreCase("shouldwait")) {
+			return winState;
+		} else if (winState.equalsIgnoreCase("won")) {
+			return winState;
+		} else if (winState.equalsIgnoreCase("lost")) {
+			return winState;
+		}
 		//Make Move
+		logger.info("I could not determine the current gameState. This means the connection to the server was lost.");
+		return null;
 	}
 	
 	public GameModel getGameModel() {

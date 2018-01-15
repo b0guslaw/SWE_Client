@@ -149,6 +149,7 @@ public class MessageController {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getForObject(_url, String.class);
+		
 		JAXBContext jaxbContext = JAXBContext.newInstance(GameState.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		
