@@ -9,8 +9,7 @@ import game.GameController;
 public class Main {
 
 	public static void main(String[] args) throws JAXBException {
-		boolean testingEnv = true; //toggle this to false for productive usage
-		if(args.length > 2 && !testingEnv) {
+		if(args.length < 1) {
 			System.out.println("Please provide the URL of the server you are trying to connect to as argument");
 			return;
 		}
@@ -32,10 +31,17 @@ public class Main {
 		cont.startGame();
 		cont.getGameModel().generateOwnMap();
 		cont.getGameModel().transferMapToServer();
+		String endResult = null;
 		try {
-			cont.runGame();
+			endResult = cont.runGame();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+		
+		if(endResult != null) {
+			System.out.println("The game was " + endResult);
+		} else {
+			System.out.println("Something went wrong, please refer to the stacktrace. Ending...");
 		}
 	}
 

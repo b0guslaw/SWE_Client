@@ -1,14 +1,7 @@
 package game;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jaxb.GameIdentifier;
 
 public class GameController {
 	private GameModel model;
@@ -22,10 +15,12 @@ public class GameController {
 	}
 	
 	public void startGame() {
+		logger.info("Initalizing game");
 		model.startNewGame();
 	}
 	
 	public String runGame() throws InterruptedException {
+		logger.info("Starting main game logic");
 		String winState = model.updateGameState();
 		
 		while(true) {
@@ -33,7 +28,7 @@ public class GameController {
 				break;
 			}
 			if(winState.equalsIgnoreCase("shouldWait")) {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 				winState = model.updateGameState();
 				continue;
 			}
@@ -50,6 +45,8 @@ public class GameController {
 		}
 			
 		//TODO pass new information to gameView
+		
+		//when this return statement is reached, the game is over. Checking the state happens in main
 		return winState;
 	}
 	

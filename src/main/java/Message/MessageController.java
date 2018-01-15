@@ -91,8 +91,11 @@ public class MessageController {
 		JAXBContext responseContext = JAXBContext.newInstance(ResponseEnvelope.class);
 		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
 		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
+		
+		System.out.println("~~~~~~~~~~~ XML: " + response);
+		
 		if(envelope != null) {
-			return envelope.getuniquePlayerID();
+			return envelope.getUniquePlayerID();
 		} else {
 			logger.error("Something went wrong during the player registration");
 			return null;
@@ -148,7 +151,7 @@ public class MessageController {
 		GameState gameState = new GameState();
 		
 		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getForObject(_url, String.class);
+		response = restTemplate.getForObject(_url, String.class);
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(GameState.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

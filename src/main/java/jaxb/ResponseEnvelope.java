@@ -2,6 +2,8 @@ package jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -14,7 +16,7 @@ public class ResponseEnvelope {
 	private String exceptionMessage;
 	private String state;
 	private String data;
-	private String uniquePlayerID;
+	private UniquePlayerID uniquePlayerID;
 	
 	public String getExceptionName() {
 		return exceptionName;
@@ -40,10 +42,12 @@ public class ResponseEnvelope {
 	public void setData(String data) {
 		this.data = data;
 	}
-	public String getuniquePlayerID() {
-		return uniquePlayerID;
+	
+	public String getUniquePlayerID() {
+		return uniquePlayerID.getUniquePlayerID();
 	}
-	public void setuniquePlayerID(String uniquePlayerID) {
+	
+	public void setUniquePlayerID(UniquePlayerID uniquePlayerID) {
 		this.uniquePlayerID = uniquePlayerID;
 	}
 }

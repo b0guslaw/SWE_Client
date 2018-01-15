@@ -12,7 +12,6 @@ public class GameModel {
 	private MessageController messageController;
 	private String gameID, uniqueplayerID;
 	private String playerFirstName, playerLastName, studentID;
-	private String playerState;
 	private Map map;
 	
 	private Logger logger = LoggerFactory.getLogger(GameModel.class);
@@ -22,7 +21,6 @@ public class GameModel {
 		this.playerFirstName = _playerFirstName;
 		this.playerLastName = _playerLastName;
 		this.studentID = _studentID;
-		this.playerState = "";
 		if(_gameID != null) {
 			this.gameID = _gameID;	
 		}
@@ -50,7 +48,6 @@ public class GameModel {
 	}
 	
 	public void transferMapToServer() {
-		generateOwnMap();
 		try {
 			logger.info("Sending Half Map to the server...");
 			messageController.sendHalfMap(gameID, uniqueplayerID, map);
@@ -132,10 +129,6 @@ public class GameModel {
 			map.resetOwnHalf();
 			finished = map.generateOwnHalf();
 		}
-	}
-	
-	private void generateOtherMap(MapNode[][] otherMapHalf) {
-		map.setOtherHalf(otherMapHalf);
 	}
 	
 	public Map getMap() {

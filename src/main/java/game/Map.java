@@ -63,7 +63,7 @@ public class Map {
 		 * This also reduces the risk of islands.
 		 */
 		if (waterCount > 4 && grassCount > 5 && mountainCount > 3) {
-			logger.warn("Map generation failed because of not upheld business rules. Retryin...");
+			logger.warn("Map generation failed because of not upheld business rules. Retrying...");
 			return false; // no reason to continue at this point
 		}
 
