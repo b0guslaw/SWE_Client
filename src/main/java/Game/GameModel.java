@@ -2,13 +2,19 @@ package game;
 
 import javax.xml.bind.JAXBException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import Message.MessageController;
+import jaxb.GameState;
 
 public class GameModel {
 	private MessageController messageController;
 	private String gameID, uniqueplayerID;
 	private String playerFirstName, playerLastName, studentID;
 	private Map map;
+	
+	private Logger logger = LoggerFactory.getLogger(GameModel.class);
 	
 	public GameModel(String url, String _playerFirstName, String  _playerLastName, String _studentID) {
 		messageController = new MessageController(url);
@@ -20,9 +26,13 @@ public class GameModel {
 	
 	public void startNewGame() {
 		try {
+			logger.info("Initializing connection to the server...");
 			gameID = messageController.newGame();
+			logger.info("Retrieved Game ID, asking the server for a unique player ID...");
 			uniqueplayerID = messageController.registerPlayer(playerFirstName, playerLastName, studentID, gameID);
+			logger.info("Connection established!");
 		} catch (JAXBException e) {
+			logger.error("There was an error parsing the XML when creating a new Game.");
 			e.printStackTrace();
 		}
 	}
@@ -30,10 +40,27 @@ public class GameModel {
 	public void transferMapToServer() {
 		generateOwnMap();
 		try {
+			logger.info("Sending Half Map to the server...");
 			messageController.sendHalfMap(gameID, uniqueplayerID, map);
+			logger.info("HalfMap has been transferred!");
 		} catch (JAXBException e) {
+			logger.error("There was an error parsing the XML when sending our halfmap to the server.");
 			e.printStackTrace();
 		}
+	}
+	
+	public void updateGameState() {
+		GameState gs = new GameState();
+		
+		try {
+			messageController.requestGameState(gameID, uniqueplayerID);
+		} catch (JAXBException e) {
+			logger.error("There was an error parsing the XML when requesting the GameState.");
+			e.printStackTrace();
+		}
+		//Update Map
+		//Check Game State
+		//Make Move
 	}
 	
 	public GameModel getGameModel() {

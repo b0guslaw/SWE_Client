@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import game.Map;
 import jaxb.GameIdentifier;
+import jaxb.GameState;
 import jaxb.HalfMap;
 import jaxb.PlayerRegistration;
 import jaxb.ResponseEnvelope;
@@ -131,5 +132,29 @@ public class MessageController {
 		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
 		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
 		return envelope.getState();
+	}
+	
+	/**
+	 * Handles gamestate GET requests to the server. Returns the entire GameState object,
+	 * as the gameController needs to pass it to the GameModel for processing
+	 * @param gameID
+	 * @param playerID
+	 * @return GameState
+	 * @throws JAXBException
+	 */
+	public GameState requestGameState(String gameID, String playerID) throws JAXBException {
+		String response = null;
+		String _url = this.url + "/game/" + gameID + "/state/" + playerID;
+		GameState gameState = new GameState();
+		
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getForObject(_url, String.class);
+		JAXBContext jaxbContext = JAXBContext.newInstance(GameState.class);
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+		
+		StringReader reader = new StringReader(response);
+		gameState = (GameState) unmarshaller.unmarshal(reader);
+		
+		return gameState;
 	}
 }

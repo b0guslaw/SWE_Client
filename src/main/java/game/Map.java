@@ -147,6 +147,11 @@ public class Map {
 		return helperArrayList;
 	}
 
+	public void createFullMapFromArrayList(ArrayList<NewMapNode> arrayList) {
+		
+	}
+	
+	
 	public MapNode[][] getOwnHalf() {
 		return this._ownHalf;
 	}
