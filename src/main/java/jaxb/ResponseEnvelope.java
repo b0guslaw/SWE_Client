@@ -3,20 +3,19 @@ package jaxb;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="ResponseEnvelope")
-@XmlType(propOrder = {"exceptionName","exceptionMessage","state","data","uniquePlayerID"})
+@XmlRootElement(name = "ResponseEnvelope")
 public class ResponseEnvelope {
-	
+	@XmlElement(name = "exceptionName")
 	private String exceptionName;
+	@XmlElement(name = "exceptionMessage")
 	private String exceptionMessage;
+	@XmlElement(name = "state")
 	private String state;
-	private String data;
-	private UniquePlayerID uniquePlayerID;
+	@XmlElement(name = "data")
+	private UniquePlayerIdentifier data;
 	
 	public String getExceptionName() {
 		return exceptionName;
@@ -36,18 +35,22 @@ public class ResponseEnvelope {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public String getData() {
-		return data;
+	public String getUniquePlayerIdentifier() {
+		return data.getUniquePlayerID();
 	}
-	public void setData(String data) {
-		this.data = data;
-	}
-	
-	public String getUniquePlayerID() {
-		return uniquePlayerID.getUniquePlayerID();
+	public void setUniquePlayerIdentifier(String uniquePlayerID) {
+		this.data.setUniquePlayerID(uniquePlayerID);
 	}
 	
-	public void setUniquePlayerID(UniquePlayerID uniquePlayerID) {
-		this.uniquePlayerID = uniquePlayerID;
+	public static class UniquePlayerIdentifier {
+		private String uniquePlayerID;
+
+		public String getUniquePlayerID() {
+			return uniquePlayerID;
+		}
+
+		public void setUniquePlayerID(String uniquePlayerID) {
+			this.uniquePlayerID = uniquePlayerID;
+		}
 	}
 }

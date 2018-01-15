@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,17 +86,20 @@ public class MessageController {
 		HttpEntity<String> request = new HttpEntity<String>(xmlString.toString(), headers);
 		//Send POST
 		String postUrl = url + "/game/" + gameID + "/register";
+		System.out.println("Sent request: " + request.toString());
 		String response = restTemplate.postForObject(postUrl, request, String.class);
+		System.out.println("Found response: " + response);
 		StringReader reader = new StringReader(response);
 		//unmarshall response from Server
 		JAXBContext responseContext = JAXBContext.newInstance(ResponseEnvelope.class);
 		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
 		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
 		
-		System.out.println("~~~~~~~~~~~ XML: " + response);
-		
+		//System.out.println("~~~~~~~~~~~ XML: " + response);
 		if(envelope != null) {
-			return envelope.getUniquePlayerID();
+			System.out.println(envelope.getState());
+			System.out.println(envelope.getUniquePlayerIdentifier());
+			return envelope.getUniquePlayerIdentifier();
 		} else {
 			logger.error("Something went wrong during the player registration");
 			return null;
@@ -113,6 +117,7 @@ public class MessageController {
 	public String sendHalfMap(String gameID, String playerID, Map _map) throws JAXBException {
 		//Build XML
 		HalfMap map = new HalfMap();
+		map.setUnqiuePlayerID(playerID);
 		map.setNewMapNodes(_map.getOwnHalfArrayList());
 		
 		JAXBContext context = JAXBContext.newInstance(HalfMap.class);

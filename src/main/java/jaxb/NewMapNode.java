@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name="NewMapNode")
+@XmlRootElement(name="newMapNode")
 @XmlType(propOrder = {"X","Y","fortPresent","terrain"})
 public class NewMapNode {
 	private int X;
