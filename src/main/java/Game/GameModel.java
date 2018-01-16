@@ -71,7 +71,7 @@ public class GameModel {
 		}
 		
 		//Update Map
-		map.createFullMapFromArrayList(gs.getMap());
+		//map.createFullMapFromArrayList(gs.getMap());
 		//Check Game State
 		if(winState.equalsIgnoreCase("shouldactnext")) {
 			

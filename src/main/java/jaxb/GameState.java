@@ -10,12 +10,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="ResponseEnvelope")
 public class GameState {
+	@XmlElement(name = "exceptionName")
 	private String exceptionName;
+	@XmlElement(name = "exceptionMessage")
 	private String exceptionMessage;
+	@XmlElement(name = "state")
 	private String state;
-	private ArrayList<Player> players;
-	@XmlElement(name="mapNodes")
-	private ArrayList<NewMapNode> map;
+	@XmlElement(name = "data")
+	private ArrayList<Player> player;
+	
 	public String getExceptionName() {
 		return exceptionName;
 	}
@@ -34,16 +37,47 @@ public class GameState {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public ArrayList<Player> getPlayers() {
-		return players;
+	public ArrayList<Player> getPlayer() {
+		return player;
 	}
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
+	public void setPlayer(ArrayList<Player> player) {
+		this.player = player;
 	}
-	public ArrayList<NewMapNode> getMap() {
-		return map;
+	
+	private static class Player {
+		private String firstName;
+		private String lastName;
+		private String uniquePlayerID;
+		private String playerState;
+		
+		public String getFirstName() {
+			return firstName;
+		}
+		public void setFirstName(String firstName) {
+			this.firstName = firstName;
+		}
+		public String getLastName() {
+			return lastName;
+		}
+		public void setLastName(String lastName) {
+			this.lastName = lastName;
+		}
+		public String getUniquePlayerID() {
+			return uniquePlayerID;
+		}
+		public void setUniquePlayerID(String uniquePlayerID) {
+			this.uniquePlayerID = uniquePlayerID;
+		}
+		public String getPlayerState() {
+			return playerState;
+		}
+		public void setPlayerState(String playerState) {
+			this.playerState = playerState;
+		}
 	}
-	public void setMap(ArrayList<NewMapNode> map) {
-		this.map = map;
+	
+	private static class Map {
+		
 	}
+
 }

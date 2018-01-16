@@ -19,8 +19,8 @@ public class Map {
 	 */
 	public Map() {
 		_fullMap = new MapNode[8][8];
-		_ownHalf = new MapNode[4][8];
-		_otherHalf = new MapNode[4][8];
+		_ownHalf = new MapNode[8][4];
+		_otherHalf = new MapNode[8][4];
 		castleIndex = new int[2];
 	}
 
@@ -37,10 +37,10 @@ public class Map {
 		int grassCount = 0, waterCount = 0, mountainCount = 0;
 		int randNum;
 		MapNode node = null;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 8; j++) {
+		for (int x = 0; x < 8; x++) {
+			for (int y = 0; y < 4; y++) {
 				randNum = ThreadLocalRandom.current().nextInt(0, 11);
-				if (randNum < 2 && waterCount != 4 && i != 0) {
+				if (randNum < 2 && waterCount != 4 && x != 0) {
 					node = new MapNode("Water", false, false);
 					++waterCount;
 
@@ -52,7 +52,7 @@ public class Map {
 					node = new MapNode("Grass", false, false);
 					++grassCount;
 				}
-				_ownHalf[i][j] = node;
+				_ownHalf[x][y] = node;
 			}
 		}
 
@@ -67,33 +67,23 @@ public class Map {
 			return false; // no reason to continue at this point
 		}
 
-		int randRowFort = ThreadLocalRandom.current().nextInt(0, 4);
-		int randColFort = ThreadLocalRandom.current().nextInt(0, 8);
-		_ownHalf[randRowFort][randColFort].setFort();
+		int xFort = ThreadLocalRandom.current().nextInt(0, 8);
+		int yFort = ThreadLocalRandom.current().nextInt(0, 4);
+		
+		while(true) {
+			if(_ownHalf[xFort][yFort].getTerrainType().equalsIgnoreCase("grass")) {
+				_ownHalf[xFort][yFort].setFort();
+				break;
+			}
+			xFort = ThreadLocalRandom.current().nextInt(0, 8);
+			yFort = ThreadLocalRandom.current().nextInt(0, 4);
+		}
+		
 		//this is just to be sure I can find the castle again by easy access without going through the whole map
-		castleIndex[0] = randRowFort;
-		castleIndex[1] = randColFort;
+		castleIndex[0] = xFort;
+		castleIndex[1] = yFort;
 		logger.info("Map generation completed");
 		return true;
-	}
-
-	/**
-	 * This function takes a 2D Array of MapNodes as argument and copies it into the
-	 * local field.
-	 * 
-	 * @param otherMapHalf
-	 */
-	public void setOtherHalf(MapNode[][] otherMapHalf) {
-		try {
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 8; j++) {
-					_otherHalf[i][j] = otherMapHalf[i][j];
-				}
-			}
-		} catch (NullPointerException npe) {
-			logger.error("The received map was null ");
-			npe.printStackTrace();
-		}
 	}
 
 	/**
@@ -102,29 +92,16 @@ public class Map {
 	 */
 	public void resetOwnHalf() {
 		_ownHalf = null;
-		_ownHalf = new MapNode[4][8];
+		_ownHalf = new MapNode[8][4];
 	}
 
 	/**
-	 * After map generation is done, we can assemble the two map halfs. In this
-	 * client's implementation the lower map is always the own map.
+	 * After map generation is done, this function rebuilds the full map. 
+	 * @param ArrayList<NewMapNode> 
 	 */
-	public void assembleFullMap() {
+	public void assembleFullMap(ArrayList<NewMapNode> mapNodes) {
 		try {
-			// assembling top half
-			for (int i = 0; i < 4; ++i) {
-				for (int j = 0; j < 8; ++j) {
-					_fullMap[i][j] = _otherHalf[i][j];
-				}
-			}
-			// assembling lower (own) half
-			int ownRow = 0;
-			for (int i = 5; i <= 8; ++i) {
-				for (int j = 0; j < 8; ++j) {
-					_fullMap[i][j] = _ownHalf[ownRow][j];
-					++ownRow;
-				}
-			}
+			//TODO
 		} catch (NullPointerException npe) {
 			logger.error("Assembling the full map failed. Maybe the other half was missing?");
 			npe.printStackTrace();
@@ -134,25 +111,24 @@ public class Map {
 	public ArrayList<NewMapNode> getOwnHalfArrayList() {
 		ArrayList<NewMapNode> helperArrayList = new ArrayList<NewMapNode>();
 
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 8; ++j) {
+		for (int x = 0; x < 8; ++x) {
+			for (int y = 0; y < 4; ++y) {
 				NewMapNode temp = new NewMapNode();
-				temp.setX(j);
-				temp.setY(i);
-				temp.setTerrain(_ownHalf[i][j].getTerrainType());
-				temp.setFortPresent(_ownHalf[i][j].IsFortPresent());
+				temp.setX(x);
+				temp.setY(y);
+				temp.setTerrain(_ownHalf[x][y].getTerrainType());
+				temp.setFortPresent(_ownHalf[x][y].IsFortPresent());
 				helperArrayList.add(temp);
 			}
 		}
 		return helperArrayList;
 	}
-
-	public void createFullMapFromArrayList(ArrayList<NewMapNode> arrayList) {
-		
-	}
-	
 	
 	public MapNode[][] getOwnHalf() {
 		return this._ownHalf;
+	}
+
+	public void createFullMapFromArrayList(ArrayList<NewMapNode> map) {
+		
 	}
 }

@@ -9,15 +9,30 @@ import game.GameController;
 public class Main {
 
 	public static void main(String[] args) throws JAXBException {
-		if(args.length < 1) {
-			System.out.println("Please provide the URL of the server you are trying to connect to as argument");
+		
+		String firstName, lastName, studentID, url = null, gameID = null;
+		
+		if(args.length == 0 || args.length > 5) {
+			System.out.println("No or wrong parameters given. Quitting.");
+			System.out.println("Correct usage: ");
+			System.out.println("To start a new game: -url <url>");
+			System.out.println("To connect to an existing game: -url <url> -id <gameID>");
 			return;
 		}
-		String firstName, lastName, studentID, url, gameID = null;
-		url = args[0];
-		if(args.length == 2) {
+		
+		if(args[0].startsWith("-url")) {
+			if(args[1].startsWith("http")) {
+				url = args[1];
+			} else {
+				System.out.println("That is not a valid url. It should start with http");
+				return;
+			}
+		}
+		
+		if(args[0].startsWith("-id")) {
 			gameID = args[1];
 		}
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter your first name:");
 		firstName = sc.nextLine();
@@ -31,7 +46,9 @@ public class Main {
 		cont.startGame();
 		cont.getGameModel().generateOwnMap();
 		cont.getGameModel().transferMapToServer();
+		
 		String endResult = null;
+		
 		try {
 			endResult = cont.runGame();
 		} catch (InterruptedException e) {
