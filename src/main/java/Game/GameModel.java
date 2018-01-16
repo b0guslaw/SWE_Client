@@ -69,10 +69,7 @@ public class GameModel {
 			logger.error("There was an error parsing the XML when requesting the GameState.");
 			e.printStackTrace();
 		}
-		
-		//Update Map
-		//map.createFullMapFromArrayList(gs.getMap());
-		//Check Game State
+		//update game state
 		if(winState.equalsIgnoreCase("shouldactnext")) {
 			
 		} else if (winState.equalsIgnoreCase("shouldwait")) {
@@ -82,7 +79,7 @@ public class GameModel {
 		} else if (winState.equalsIgnoreCase("lost")) {
 			return winState;
 		}
-		//Make Move
+		
 		logger.info("I could not determine the current gameState. This means the connection to the server was lost.");
 		return null;
 	}

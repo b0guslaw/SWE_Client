@@ -46,13 +46,12 @@ public class MessageController {
 	public String newGame() throws JAXBException {
 		String response = "", requestString = url + "/game/new";
 		RestTemplate restTemplate = new RestTemplate();
+		logger.info("Sending GET request to Server");
 		response = restTemplate.getForObject(requestString, String.class);
 		
 		JAXBContext jaxbContext = JAXBContext.newInstance(GameIdentifier.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-		//System.out.println("XML" + response);
-		
 		StringReader reader = new StringReader(response);
 		GameIdentifier game = (GameIdentifier) unmarshaller.unmarshal(reader);
 		
@@ -95,7 +94,6 @@ public class MessageController {
 		Unmarshaller unmarshaller = responseContext.createUnmarshaller();
 		ResponseEnvelope envelope = (ResponseEnvelope) unmarshaller.unmarshal(reader);
 		
-		//System.out.println("~~~~~~~~~~~ XML: " + response);
 		if(envelope != null) {
 			System.out.println(envelope.getState());
 			System.out.println(envelope.getUniquePlayerIdentifier());
@@ -166,6 +164,7 @@ public class MessageController {
 		
 		StringReader reader = new StringReader(response);
 		gameState = (GameState) unmarshaller.unmarshal(reader);
+
 		
 		return gameState;
 	}

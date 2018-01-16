@@ -45,6 +45,7 @@ public class Main {
 		GameController cont = new GameController(url, firstName, lastName, studentID, gameID);
 		cont.startGame();
 		cont.getGameModel().generateOwnMap();
+		cont.getGameView().printOwn(cont.getGameModel().getMap().getOwnHalf());
 		cont.getGameModel().transferMapToServer();
 		
 		String endResult = null;
